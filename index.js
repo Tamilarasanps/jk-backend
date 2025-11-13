@@ -1,23 +1,35 @@
 const express = require("express");
 const app = express();
 const connectDb = require("./config/db");
-require("dotenv").config;
-const port = process.env.PORT || 5000;
 const cors = require("cors");
 const uploadRoutes = require("./routes/upload.route");
+require("dotenv").config();
+
+const port = process.env.PORT || 5000;
+
+// ✅ CORS must come before routes
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:5173"], // your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
+app.use(express.static("public"));
 
+// ✅ Connect DB before starting server
 connectDb();
-app.use(cors());
 
-//routes
-app.use("/api/upload", uploadRoutes);
+// ✅ Register routes after middleware
+app.use("/api", uploadRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to supreman server");
 });
 
-app.listen(port, (req, res) => {
-  console.log(`app is runing ${port}`);
+app.listen(port, () => {
+  console.log(`✅ App is running on port ${port}`);
 });
+11;
