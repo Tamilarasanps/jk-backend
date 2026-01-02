@@ -3,6 +3,8 @@ const app = express();
 const connectDb = require("./config/db");
 const cors = require("cors");
 const uploadRoutes = require("./routes/upload.route");
+const priceRoute = require("./routes/price.routes");
+const pdfRoute = require("./routes/pdfRoutes");
 require("dotenv").config();
 
 const port = process.env.PORT || 5000;
@@ -24,6 +26,9 @@ connectDb();
 
 // ✅ Register routes after middleware
 app.use("/api", uploadRoutes);
+app.use("/prices", priceRoute);
+app.use("/api", pdfRoute);
+app.use("/uploads", express.static("uploads"));
 
 app.get("/", (req, res) => {
   res.send("Welcome to supreman server");
